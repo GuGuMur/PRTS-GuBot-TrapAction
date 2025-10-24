@@ -1,5 +1,5 @@
 from mwbot import Bot, utils
-from pathlib import Path
+from pathlib import Path  # noqa: F401
 import asyncio
 from trapstage.source.local import return_text as rtl
 import re
