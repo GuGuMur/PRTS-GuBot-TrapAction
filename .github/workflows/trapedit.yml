@@ -1,4 +1,4 @@
-name: Update New Traps
+name: 编辑版本新增装置
 
 on:
   workflow_dispatch:
@@ -26,11 +26,10 @@ jobs:
 
       - name: Run Actions
         run: |
-          uv run src/__init__.py trapstage \
+          uv run src/__init__.py trapedit \
             --username "$USERNAME" \
             --password "$PASSWORD"
         shell: bash
         env:
-          PAGE: "${{ github.event.inputs.page }}"
           USERNAME: "${{ secrets.GH_BOT_USERNAME }}"
           PASSWORD: "${{ secrets.GH_BOT_PASSWORD }}"

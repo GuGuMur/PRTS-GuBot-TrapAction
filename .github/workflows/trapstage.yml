@@ -1,4 +1,4 @@
-name: Update Stage Traps
+name: 编辑新增关卡的装置
 
 on:
   workflow_dispatch:
