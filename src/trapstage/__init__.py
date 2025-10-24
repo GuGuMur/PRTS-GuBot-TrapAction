@@ -1,8 +1,7 @@
 from mwbot import Bot, utils
 from pathlib import Path
 import asyncio
-from source.local import return_text as rtl
-from source.internet import return_text as rti
+from trapstage.source.local import return_text as rtl
 import re
 import json
 
