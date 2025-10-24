@@ -1,0 +1,14 @@
+[project]
+name = "prts-gubot-trapaction"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = "==3.13.*"
+dependencies = [
+    "anyio>=4.11.0",
+    "click>=8.3.0",
+    "httpx>=0.28.1",
+    "mwbot>=1.0.42",
+    "torappu @ git+https://github.com/GuGuMur/torappu.git@master"
+]
+

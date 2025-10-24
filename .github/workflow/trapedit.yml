@@ -1,0 +1,25 @@
+name: Update New Traps
+
+on:
+  workflow_dispatch:
+
+runs:
+  using: "composite"
+  steps:
+    - name: Checkout
+      uses: actions/checkout@v5
+
+    - name: Setup Python environment
+      uses: ./.github/actions/setup-python
+
+    - name: Clone GameData
+      run: |
+        sudo mkdir /home/bot
+        cd /home/bot
+        sudo git clone https://github.com/Kengxxiao/ArknightsGameData.git --depth 1
+
+    - name: Run Actions
+      run: |
+        uv run src/__init__.py trapedit \
+          --username "${{ secrets.GH_BOT_USERNAME }}" \
+          --password "${{ secrets.GH_BOT_PASSWORD }}"

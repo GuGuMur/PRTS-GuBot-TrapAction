@@ -1,0 +1,30 @@
+name: Update Stage Traps
+
+on:
+  workflow_dispatch:
+    inputs:
+      page:
+        description: "关卡页面集合"
+        default: "首页"
+
+runs:
+  using: "composite"
+  steps:
+    - name: Checkout
+      uses: actions/checkout@v5
+
+    - name: Setup Python environment
+      uses: ./.github/actions/setup-python
+
+    - name: Clone GameData
+      run: |
+        sudo mkdir /home/bot
+        cd /home/bot
+        sudo git clone https://github.com/Kengxxiao/ArknightsGameData.git --depth 1
+
+    - name: Run Actions
+      run: |
+        uv run src/__init__.py trapstage \
+          --page "${{ github.event.inputs.page }}" \
+          --username "${{ secrets.GH_BOT_USERNAME }}" \
+          --password "${{ secrets.GH_BOT_PASSWORD }}"
