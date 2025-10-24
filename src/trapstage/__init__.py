@@ -9,5 +9,8 @@ async def main(page: str, username: str, password: str) -> None:
         username=username,
         password=password,
     )
+    print(len(username), len(password))
+
     await bot.login()
+
     arktool.read_ark_file("excel/skill_table.json")

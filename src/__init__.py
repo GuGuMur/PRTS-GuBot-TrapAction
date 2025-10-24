@@ -10,7 +10,13 @@ def cli_group():
 
 
 @cli_group.command('trapstage')
-@click.option('--page', '-p', default='首页', show_default=True, help='哪里有一堆需要处理的关卡页面')
+@click.option(
+    "--page",
+    "-p",
+    default="首页/新增关卡",
+    show_default=True,
+    help="哪里有一堆需要处理的关卡页面",
+)
 @click.option('--username', '-u', help='bot name')
 @click.option('--password', '-w', help='bot password')
 def _trapstage(page: str, username: str, password: str) -> None:

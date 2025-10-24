@@ -5,7 +5,7 @@ on:
     inputs:
       page:
         description: "关卡页面集合"
-        default: "首页"
+        default: "首页/新增关卡"
 
 jobs:
   ruff:

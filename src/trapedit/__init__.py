@@ -8,4 +8,5 @@ async def main(username: str, password: str) -> None:
         username=username,
         password=password,
     )
+    print(len(username), len(password))
     await bot.login()
