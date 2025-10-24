@@ -445,6 +445,7 @@ dependencies = [
     { name = "anyio" },
     { name = "click" },
     { name = "httpx" },
+    { name = "loguru" },
     { name = "mwbot" },
     { name = "torappu" },
 ]
@@ -454,6 +455,7 @@ requires-dist = [
     { name = "anyio", specifier = ">=4.11.0" },
     { name = "click", specifier = ">=8.3.0" },
     { name = "httpx", specifier = ">=0.28.1" },
+    { name = "loguru", specifier = ">=0.7.3" },
     { name = "mwbot", specifier = ">=1.0.42" },
     { name = "torappu", git = "https://github.com/GuGuMur/torappu.git?rev=master" },
 ]

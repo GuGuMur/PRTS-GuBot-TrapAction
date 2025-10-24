@@ -8,7 +8,8 @@ dependencies = [
     "anyio>=4.11.0",
     "click>=8.3.0",
     "httpx>=0.28.1",
+    "loguru>=0.7.3",
     "mwbot>=1.0.42",
-    "torappu @ git+https://github.com/GuGuMur/torappu.git@master"
+    "torappu @ git+https://github.com/GuGuMur/torappu.git@master",
 ]
 
