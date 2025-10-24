@@ -471,7 +471,10 @@ async def main(username: str, password: str) -> None:
         username=username,
         password=password,
     )
-    await bot.login()
+    try:
+        await bot.login()
+    except Exception:
+        pass
     # client
 
     char_data = arktool.read_ark_file("excel/character_table.json")

@@ -1,13 +1,4 @@
 # ALL DATA
-from mwbot import Bot
-
-bot = Bot(
-    sitename="PRTS",
-    api="https://prts.wiki/api.php",
-    index="https://prts.wiki/index.php",
-    username="GuBot",
-    password="MainBot@av89f6mgb7ns4m2ul8gaa8sdhq30altt",
-)
 
 URL = "https://prts.wiki/api.php"
 CHAR_SOURCE = "https://raw.githubusercontent.com/Kengxxiao/ArknightsGameData/master/zh_CN/gamedata/excel/character_table.json"
