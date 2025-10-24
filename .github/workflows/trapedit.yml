@@ -26,6 +26,11 @@ jobs:
 
       - name: Run Actions
         run: |
-          uv run src/__init__.py trapedit \
-            --username "${{ secrets.GH_BOT_USERNAME }}" \
-            --password "${{ secrets.GH_BOT_PASSWORD }}"
+          uv run src/__init__.py trapstage \
+            --username "$USERNAME" \
+            --password "$PASSWORD"
+        shell: bash
+        env:
+          PAGE: "${{ github.event.inputs.page }}"
+          USERNAME: "${{ secrets.GH_BOT_USERNAME }}"
+          PASSWORD: "${{ secrets.GH_BOT_PASSWORD }}"
