@@ -29,13 +29,11 @@ def _trapstage(page: str, username: str, password: str) -> None:
 @click.option("--password", "-w", help="bot password")
 def _trapedit(username: str, password: str) -> None:
     from trapedit import main as perform_action
-
     coro = partial(perform_action, username=username, password=password)
     anyio.run(coro)
 
 
 def main():
-	"""导出给外部运行的 main 入口。"""
 	try:
 		cli_group()
 	except Exception as e:
