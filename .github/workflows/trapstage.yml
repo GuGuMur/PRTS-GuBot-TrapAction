@@ -7,24 +7,30 @@ on:
         description: "关卡页面集合"
         default: "首页"
 
-runs:
-  using: "composite"
-  steps:
-    - name: Checkout
-      uses: actions/checkout@v5
+jobs:
+  ruff:
+    name: Update Stage Traps
+    runs-on: ubuntu-latest
+    concurrency:
+      group: trapedit-${{ github.ref }}
+      cancel-in-progress: true
 
-    - name: Setup Python environment
-      uses: ./.github/actions/setup-python
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
 
-    - name: Clone GameData
-      run: |
-        sudo mkdir /home/bot
-        cd /home/bot
-        sudo git clone https://github.com/Kengxxiao/ArknightsGameData.git --depth 1
+      - name: Setup Python environment
+        uses: ./.github/actions/setup-python
 
-    - name: Run Actions
-      run: |
-        uv run src/__init__.py trapstage \
-          --page "${{ github.event.inputs.page }}" \
-          --username "${{ secrets.GH_BOT_USERNAME }}" \
-          --password "${{ secrets.GH_BOT_PASSWORD }}"
+      - name: Clone GameData
+        run: |
+          sudo mkdir /home/bot
+          cd /home/bot
+          sudo git clone https://github.com/Kengxxiao/ArknightsGameData.git --depth 1
+
+      - name: Run Actions
+        run: |
+          uv run src/__init__.py trapstage \
+            --page "${{ github.event.inputs.page }}" \
+            --username "${{ secrets.GH_BOT_USERNAME }}" \
+            --password "${{ secrets.GH_BOT_PASSWORD }}"
