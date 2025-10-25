@@ -125,7 +125,7 @@ def char_data_fill(text, path, data):
     return {k: str(v) for k, v in result.items()}
 
 
-async def asset_data_fill(asset_data, id, client):
+async def asset_data_fill(asset_data, id, client: Client):
     SCRIPT_SET = {
         "Trap",
         "MapDependentTrap",
@@ -309,7 +309,7 @@ async def generateTrapText(key, value, sem: asyncio.Semaphore, client):
         def zipcontent(text):
             return re.sub(r"\n+", "\n", str(text))
 
-        print(title)
+        logger.success(title)
 
         async def trapside():
             assetsdata = await asset_data_fill(asset_data, key, client)
@@ -389,57 +389,57 @@ def update_trap_template_ids(
 
 
 async def editTrapPage(value, sem: asyncio.Semaphore):
-    # async with sem:
-    await asyncio.sleep(1)
-    existed_content = ""
-    try:
-        existed_content = await bot.get_page_text(value["pagetitle"])
-    except Exception:
+    async with sem:
+        # await asyncio.sleep(1)
         existed_content = ""
-    if not existed_content:
-        await bot.edit_page(
-            title=value["pagetitle"],
-            text=value["content"],
-            summary="//Edit by bot.",
-            minor=True,
-        )
-    else:
-        code = parse(existed_content)
-        if has_template_in_text("装置信息", code):
-            code, changed = update_trap_template_ids(code, value["trapid"])
-            if changed:
-                await bot.edit_page(
-                    title=value["pagetitle"],
-                    text=str(code),
-                    summary="//Update ids by bot.",
-                    minor=True,
-                )
-            else:
-                logger.info(f"skip {value['pagetitle']}")
+        try:
+            existed_content = await bot.get_page_text(value["pagetitle"])
+        except Exception:
+            existed_content = ""
+        if not existed_content:
+            await bot.edit_page(
+                title=value["pagetitle"],
+                text=value["content"],
+                summary="//Edit by bot.",
+                minor=True,
+            )
         else:
-            alt_title = value["pagetitle"] + "(装置)"
-            alt_content = ""
-            try:
-                alt_content = await bot.get_page_text(alt_title)
-            except Exception:
-                alt_content = ""
-            alt_code = parse(alt_content)
-            if alt_content and has_template_in_text("装置信息", alt_code):
-                alt_code, changed = update_trap_template_ids(alt_code, value["trapid"])
+            code = parse(existed_content)
+            if has_template_in_text("装置信息", code):
+                code, changed = update_trap_template_ids(code, value["trapid"])
                 if changed:
                     await bot.edit_page(
-                        title=alt_title,
-                        text=str(alt_code),
+                        title=value["pagetitle"],
+                        text=str(code),
                         summary="//Update ids by bot.",
                         minor=True,
                     )
+                else:
+                    logger.info(f"skip {value['pagetitle']}")
             else:
-                await bot.edit_page(
-                    title=value["pagetitle"] + "(装置)",
-                    text=value["content"],
-                    summary="//Edit by bot.",
-                    minor=True,
-                )
+                alt_title = value["pagetitle"] + "(装置)"
+                alt_content = ""
+                try:
+                    alt_content = await bot.get_page_text(alt_title)
+                except Exception:
+                    alt_content = ""
+                alt_code = parse(alt_content)
+                if alt_content and has_template_in_text("装置信息", alt_code):
+                    alt_code, changed = update_trap_template_ids(alt_code, value["trapid"])
+                    if changed:
+                        await bot.edit_page(
+                            title=alt_title,
+                            text=str(alt_code),
+                            summary="//Update ids by bot.",
+                            minor=True,
+                        )
+                else:
+                    await bot.edit_page(
+                        title=value["pagetitle"] + "(装置)",
+                        text=value["content"],
+                        summary="//Edit by bot.",
+                        minor=True,
+                    )
 
 
 async def load_anon(client: Client, env: Environment):
