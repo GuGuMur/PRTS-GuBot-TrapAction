@@ -67,6 +67,7 @@ PATH = {
         0: {
             "candidates": {
                 0: {
+                    "unlockCondition": {"level": "天赋解锁等级"},
                     "name": "天赋名称",
                     "description": "天赋描述",
                 }

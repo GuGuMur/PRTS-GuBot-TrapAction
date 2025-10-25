@@ -117,12 +117,47 @@ def to_string(value):
 def char_data_fill(text, path, data):
     result = {}
     for key, value in path.items():
-        if type(value) is str:
+        if isinstance(value, str):
             if key in data.keys() and data[key] is not None:
                 result[value] = to_string(data[key])
         else:
             result.update(char_data_fill(text, value, data[key]))
     return {k: str(v) for k, v in result.items()}
+
+def char_data_fill_v2(text, path, data, prefix=""):
+    result = {}
+
+    for key, value in path.items():
+        current_path = f"{prefix}.{key}" if prefix else key
+
+        if key not in data or data[key] is None:
+            continue
+
+        if isinstance(value, str):
+            # 叶子节点，直接取值
+            result[value] = to_string(data[key])
+        elif isinstance(value, dict):
+            if isinstance(data[key], list):
+                # 处理列表
+                for i, item in enumerate(data[key]):
+                    if i in value:  # 只处理配置中定义的索引
+                        result.update(
+                            char_data_fill_v2(
+                                text, value[i], item, f"{current_path}[{i}]"
+                            )
+                        )
+            else:
+                # 处理嵌套字典
+                result.update(char_data_fill_v2(text, value, data[key], current_path))
+        elif isinstance(value, list):
+            # 处理整个列表
+            for i, item in enumerate(data[key]):
+                if i < len(value):
+                    result.update(
+                        char_data_fill_v2(text, value[i], item, f"{current_path}[{i}]")
+                    )
+
+    return {k: str(v) for k, v in result.items() if v is not None}
 
 
 async def asset_data_fill(asset_data, id, client: Client):
@@ -269,7 +304,7 @@ async def generateTrapText(key, value, sem: asyncio.Semaphore, client):
         content.append("==装置信息==\n")
         content.append(trap_info_template)
 
-        for k, v in char_data_fill("", PATH, value).items():
+        for k, v in char_data_fill_v2("", PATH, value).items():
             trap_info_template.add(k, strip(v))
 
         for k, v in (await asset_data_fill(asset_data, key, client)).items():
