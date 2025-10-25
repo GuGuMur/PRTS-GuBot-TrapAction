@@ -14,5 +14,8 @@ runs:
       with:
           python-version: ${{ inputs.python-version }}
 
+    - run: git submodule update --init --remote --recursive
+      shell: bash
+      
     - run: uv sync --all-extras --locked
       shell: bash
