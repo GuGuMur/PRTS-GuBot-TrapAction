@@ -514,8 +514,6 @@ async def main(username: str, password: str) -> None:
             (await generateTrapText(trapid, char_data[trapid], sem, client))
         )
 
-    # return
-    # # 保存一下
     with open(Path(__file__).parent / "all_contents.json", "w", encoding="utf-8") as f:
         json.dump(all_contents, f, ensure_ascii=False, indent=2)
         logger.success("已保存all_contents到本地文件")
