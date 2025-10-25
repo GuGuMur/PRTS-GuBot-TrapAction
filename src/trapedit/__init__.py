@@ -12,6 +12,7 @@ import UnityPy
 from httpx import AsyncClient
 from loguru import logger
 from mwbot import Bot, arktool
+from mwbot.error import mwbotLoginError
 from mwparserfromhell import parse
 from mwparserfromhell.wikicode import Template
 from torappu.core import export_client as exporter
@@ -473,7 +474,7 @@ async def main(username: str, password: str) -> None:
     )
     try:
         await bot.login()
-    except Exception:
+    except mwbotLoginError:
         pass
     # client
 
