@@ -9,7 +9,7 @@ on:
 
 jobs:
   ruff:
-    name: Update Stage Traps
+    name: 编辑新增关卡的装置
     runs-on: ubuntu-latest
     concurrency:
       group: trapedit-${{ github.ref }}

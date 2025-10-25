@@ -5,7 +5,7 @@ on:
 
 jobs:
   ruff:
-    name: Update New Traps
+    name: 编辑版本新增装置
     runs-on: ubuntu-latest
     concurrency:
       group: trapedit-${{ github.ref }}
