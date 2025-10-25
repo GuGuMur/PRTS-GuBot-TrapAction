@@ -12,7 +12,6 @@ import UnityPy
 from httpx import AsyncClient
 from loguru import logger
 from mwbot import Bot, arktool
-from mwbot.error import mwbotLoginError
 from mwparserfromhell import parse
 from mwparserfromhell.wikicode import Template
 from torappu.core import export_client as exporter
@@ -472,17 +471,13 @@ async def main(username: str, password: str) -> None:
         username=username,
         password=password,
     )
-    try:
-        await bot.login()
-    except mwbotLoginError:
-        pass
+    await bot.login()
     # client
 
     char_data = arktool.read_ark_file("excel/character_table.json")
     for k, v in char_data.items():
         v["customed_trapid"] = k
 
-    await bot.login()
     skill_data = arktool.read_ark_file("excel/skill_table.json")
     fetched_version_source = await asyncFetchJson(VERSION_SOURCE)
     resVersion = fetched_version_source["resVersion"]
