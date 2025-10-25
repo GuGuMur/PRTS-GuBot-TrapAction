@@ -14,7 +14,7 @@ from loguru import logger
 from mwbot import Bot, arktool
 from mwparserfromhell import parse
 from mwparserfromhell.wikicode import Template
-from torappu.core import main as exporter
+from torappu.core import export_client as exporter
 from torappu.core.task.task import Client
 from torappu.core.task.utils import build_container_path, read_obj
 from torappu.models import Version
