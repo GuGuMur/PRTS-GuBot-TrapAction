@@ -486,7 +486,7 @@ async def main(username: str, password: str) -> None:
         Version(res_version=resVersion, client_version=clientVersion),
         None,
         [],
-        ["gamedata"],
+        ["GameData"],
     )
 
     asset_data = await get_unity_env(resVersion, (await get_tokens_prefab(resVersion)))
