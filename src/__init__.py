@@ -24,11 +24,22 @@ def _trapstage(page: str, username: str, password: str) -> None:
 	coro = partial(perform_action, page=page, username=username, password=password)
 	anyio.run(coro)
 
-@cli_group.command('trapedit')
+@cli_group.command("trapedit")
 @click.option("--username", "-u", help="bot name")
 @click.option("--password", "-w", help="bot password")
 def _trapedit(username: str, password: str) -> None:
     from trapedit import main as perform_action
+
+    coro = partial(perform_action, username=username, password=password)
+    anyio.run(coro)
+
+
+@cli_group.command("testlogin")
+@click.option("--username", "-u", help="bot name")
+@click.option("--password", "-w", help="bot password")
+def _testlogin(username: str, password: str) -> None:
+    from testlogin import main as perform_action
+
     coro = partial(perform_action, username=username, password=password)
     anyio.run(coro)
 
