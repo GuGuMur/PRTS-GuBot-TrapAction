@@ -10,6 +10,9 @@ dependencies = [
     "httpx>=0.28.1",
     "loguru>=0.7.3",
     "mwbot>=1.0.42",
-    "torappu @ git+https://github.com/GuGuMur/torappu.git@master",
+    "torappu",
 ]
+
+[tool.uv.sources]
+torappu = { path = "./torappu", editable = true }
 

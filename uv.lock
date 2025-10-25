@@ -412,7 +412,7 @@ requires-dist = [
     { name = "httpx", specifier = ">=0.28.1" },
     { name = "loguru", specifier = ">=0.7.3" },
     { name = "mwbot", specifier = ">=1.0.42" },
-    { name = "torappu", git = "https://github.com/GuGuMur/torappu.git?rev=master" },
+    { name = "torappu", editable = "torappu" },
 ]
 
 [[package]]
@@ -628,7 +628,7 @@ wheels = [
 [[package]]
 name = "torappu"
 version = "1.30.0"
-source = { git = "https://github.com/GuGuMur/torappu.git?rev=master#7452d95c0a44db149317fdf2997feb19f65d88ee" }
+source = { editable = "torappu" }
 dependencies = [
     { name = "bson" },
     { name = "click" },
@@ -643,6 +643,29 @@ dependencies = [
     { name = "sentry-sdk", extra = ["httpx", "loguru"] },
     { name = "tenacity" },
     { name = "unitypy" },
+]
+
+[package.metadata]
+requires-dist = [
+    { name = "bson", specifier = ">=0.5.10,<0.6.0" },
+    { name = "click", specifier = ">=8.1.7,<9.0.0" },
+    { name = "fastcrc", specifier = ">=0.3.2,<0.4.0" },
+    { name = "httpx", specifier = ">=0.24.1,!=0.28.0,<1.0.0" },
+    { name = "loguru", specifier = ">=0.7.0,<1.0.0" },
+    { name = "lz4inv", specifier = ">=0.2.0,<0.3.0" },
+    { name = "numpy", specifier = ">=2.2.4,<3.0.0" },
+    { name = "pycryptodome", specifier = ">=3.18.0,<4.0.0" },
+    { name = "pydantic-settings", specifier = ">=2.0.0,<3.0.0" },
+    { name = "pydub", specifier = ">=0.25.1,<0.26.0" },
+    { name = "sentry-sdk", extras = ["loguru", "httpx"], specifier = ">=2.13.0,<3.0.0" },
+    { name = "tenacity", specifier = ">=9.0.0,<10.0.0" },
+    { name = "unitypy", specifier = "==1.22.5" },
+]
+
+[package.metadata.requires-dev]
+dev = [
+    { name = "pre-commit", specifier = ">=4.0.0,<5" },
+    { name = "ruff", specifier = ">=0.12.0,<0.13" },
 ]
 
 [[package]]

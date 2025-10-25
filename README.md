@@ -5,7 +5,8 @@ for edit
 ## Note
 
 ```shell
-git submodule set-url torappu https://github.com/GuGuMur/torappu.git
+git submodule init
+git submodule add -b master https://github.com/GuGuMur/torappu.git torappu
 git submodule sync
 git submodule update --init --recursive
 
