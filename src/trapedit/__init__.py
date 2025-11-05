@@ -41,8 +41,9 @@ class RichTextStyles:
         for s in self.richTextStyles_t:
             temp = self.richTextStyles_t[s]
             if temp.find("</color>") != -1:
-                self.richTextStyles[s] = temp.replace("<color=", "{{color|").replace(
-                    ">{0}</color>", "|"
+                self.richTextStyles[s] = \
+                    temp.replace("<color=", "{{color|") \
+                        .replace(">{0}</color>", "|"
                 )
         for k in self.termDescriptionDict_t:
             temp2 = self.termDescriptionDict_t[k]

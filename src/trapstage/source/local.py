@@ -70,7 +70,7 @@ def cell_deal_token(data: dict) -> dict:
                         ORIGINALTPLT=v, **result
                     )
             def clean_param(text: str) -> str:
-                return clean_text(text.strip()).replace("\n", "<br/>\n")
+                return clean_text(text.strip()).replace("\n", "<br/>")
             addition_text = [
                 f"|{k}={clean_param(v)}" for k, v in trap_cell_format["params"].items()
             ]
