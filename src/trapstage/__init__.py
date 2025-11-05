@@ -8,7 +8,6 @@ import json
 patterns = [r"装置\s*==", r"==\s*区块"]
 
 
-# 把这个文件移到根目录下跑
 async def deal(title, sem: asyncio.Semaphore):
     async with sem:
         text = await bot.get_page_text(title=title)
@@ -45,7 +44,7 @@ async def main(page: str, username: str, password: str) -> None:
         password=password,
     )
     await bot.login()
-    global unwritetiles, tilesformat, trapsformat, unwritetraps, bot
+    global unwritetiles, tilesformat, trapsformat, unwritetraps
     unwritetiles = await bot.get_page_text("特殊地形/trapper/unwritetiles.json")
     unwritetiles = json.loads(unwritetiles)
     tilesformat = await bot.get_page_text("特殊地形/trapper/tilesformat.json")
