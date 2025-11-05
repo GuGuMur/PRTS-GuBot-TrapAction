@@ -5,13 +5,6 @@ from trapstage.source.local import return_text as rtl
 import re
 import json
 
-bot = Bot(
-    sitename="PRTS",
-    api="https://prts.wiki/api.php",
-    index="https://prts.wiki/index.php",
-    username="GuBot",
-    password="Trapper@pdejl07fr78ier8f5r54iahomh5jeaf8",
-)
 patterns = [r"装置\s*==", r"==\s*区块"]
 
 
@@ -52,7 +45,7 @@ async def main(page: str, username: str, password: str) -> None:
         password=password,
     )
     await bot.login()
-    global unwritetiles, tilesformat, trapsformat, unwritetraps
+    global unwritetiles, tilesformat, trapsformat, unwritetraps, bot
     unwritetiles = await bot.get_page_text("特殊地形/trapper/unwritetiles.json")
     unwritetiles = json.loads(unwritetiles)
     tilesformat = await bot.get_page_text("特殊地形/trapper/tilesformat.json")
@@ -62,7 +55,7 @@ async def main(page: str, username: str, password: str) -> None:
     trapsformat = await bot.get_page_text("模板:关卡装置/trapper/trapsformat.json")
     trapsformat = json.loads(trapsformat)
     # trapsformat = json.loads( Path("./full.json").read_text(encoding="utf-8") )
-    new_pages = await bot.get_page_text("首页/新增关卡")
+    new_pages = await bot.get_page_text(page)
 
     pagelist_ori = utils.get_all_links(new_pages)
     pagelist = sorted(list(set(pagelist_ori)), key=pagelist_ori.index)
