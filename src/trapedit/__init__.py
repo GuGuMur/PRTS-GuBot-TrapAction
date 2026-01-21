@@ -570,7 +570,7 @@ async def main(username: str, password: str) -> None:
     await asyncio.sleep(2)
     trapsformat = {}
     for i in all_contents:
-        temp = {"type": i["阵营"], "params": {}}
+        temp = {"type": i["阵营"], "params": {}, "settings": {}}
         if i["装置页面"]:
             temp["params"]["装置页面"] = "yes"
         trapsformat[i["装置名"]] = temp
