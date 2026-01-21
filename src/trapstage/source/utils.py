@@ -45,6 +45,7 @@ utilsFunctions = {
     "return_skill_name": return_skill_name,
     "get_enemy_name": get_enemy_name,
 }
+
 env = Environment(variable_start_string="{$", variable_end_string="$}")
 env.globals.update(utilsFunctions)
 TEMPLATES = utils.templates_env(

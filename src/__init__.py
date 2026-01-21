@@ -44,6 +44,16 @@ def _testlogin(username: str, password: str) -> None:
     anyio.run(coro)
 
 
+@cli_group.command("trapedit_test")
+@click.option("--page", "-p", help="需要测试的页面")
+@click.option("--username", "-u", help="bot name")
+@click.option("--password", "-w", help="bot password")
+def _trapedit_test(page: str, username: str, password: str) -> None:
+    from trapstage import test as perform_action
+
+    coro = partial(perform_action, page=page, username=username, password=password)
+    anyio.run(coro)
+
 def main():
 	try:
 		cli_group()

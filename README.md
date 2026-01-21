@@ -14,4 +14,5 @@ uv add
 uv sync
 
 uv run src/__init__.py trapedit -u "xxx" -p "xxx"
+uv run src/__init__.py testlogin -u "" -p ""
 ```

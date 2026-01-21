@@ -1,9 +1,21 @@
 import mwparserfromhell
 from mwbot import arktool
 from copy import deepcopy
-from trapstage.source.utils import *  # noqa: F403
-from typing import Union
-from loguru import logger
+from trapstage.source.utils import (
+    # read_prts_static_json,
+    clean_list_and_return_str,
+    clean_text,
+    return_skill_name,
+    # get_char_name,
+    deal_key,
+    # get_enemy_name,
+    env,
+    utilsFunctions,
+    TEMPLATES,
+    rend_text_from_text,
+)  # noqa: F403
+# from typing import Union
+# from loguru import logger
 
 # arktool.GameDataPosition = "E:/ArknightsGameData/zh_CN/gamedata"
 # unwritetiles = ""
@@ -16,7 +28,7 @@ def cell_deal_token(data: dict) -> dict:
     charinfo = character_table[data["inst"]["characterKey"]]
     result = {}
     result.update(**utilsFunctions)
-    result["装置名称"] = char.get_char_name(data["inst"]["characterKey"])
+    result["装置名称"] = char.get_char_name(data["inst"]["characterKey"]).strip()
 
     # 从global里直接获取的内容-gamedata
     result["gamedata"] = {
@@ -29,7 +41,7 @@ def cell_deal_token(data: dict) -> dict:
         result["装置等级"] = data["inst"]["level"]
     if data.get("initialCnt"):
         result["装置可部署数量"] = data["initialCnt"]
-    if data.get("skillIndex") != None and data["skillIndex"] != -1:
+    if data.get("skillIndex") is not None and data["skillIndex"] != -1:
         charskillid_local = charinfo["skills"][data["skillIndex"]]["skillId"]
         result["装置技能"] = return_skill_name(skill_table, charskillid_local)
     if data.get("mainSkillLvl"):
@@ -49,18 +61,21 @@ def cell_deal_token(data: dict) -> dict:
             trap_cell_format = copy_trapsformat[str(result["装置名称"])]
             # logger.debug(trap_cell_format)
             traptype = trap_cell_format["type"]
-            for i in trap_cell_format["params"].keys():
-                if "装置技能" in i:
+            if trap_cell_format.get("settings", {}).get("displaySkill", True) is False:
+                try:
                     result.pop("装置技能")
-                    break
+                    result.pop("技能等级")
+                except KeyError:
+                    pass
             for k, v in trap_cell_format["params"].items():
                 if isinstance(v, list):
                     v_divider = "<br/>"  # value_dealt
 
-                    if v:
-                        if isinstance(v[0], dict):
-                            v_divider = v[0]["divider"]
-                    v_result = v_divider.join([item for item in v if isinstance(item, str)])
+                    if v and isinstance(v[0], dict):
+                        v_divider = str(v[0].get("divider", "<br/>"))
+                    v_result = v_divider.join(
+                        [item for item in v if isinstance(item, str)]
+                    )
                     trap_cell_format["params"][k] = rend_text_from_text(
                         ORIGINALTPLT=v_result, **result
                     )
@@ -69,23 +84,29 @@ def cell_deal_token(data: dict) -> dict:
                     trap_cell_format["params"][k] = rend_text_from_text(
                         ORIGINALTPLT=v, **result
                     )
+
             def clean_param(text: str) -> str:
                 return clean_text(text.strip()).replace("\n", "<br/>")
+
             addition_text = [
                 f"|{k}={clean_param(v)}" for k, v in trap_cell_format["params"].items()
             ]
             result["附加文本"] = "\n".join(addition_text)
         else:
             traptype = "未分类装置"
+            hint.append(
+                f"没有获取到装置 [{result['装置名称']}, {data['inst']['characterKey']}] 的应用！<br/>"
+            )
             result["附加文本"] = ""
         return {
             "type": traptype,
+            "name": result["装置名称"],
             "text": clean_text(TEMPLATES.render(T_NAME="trapper.jinja2", **result)),
         }
 
 
 def deal_token(stageinfo: dict, unedittrap: bool = True) -> str:
-    traptext: list[str | list[str]] = {}
+    traptext: dict[str, list[str]] = {}
     result_text: str = ""
     mainparams = ["predefines", "hardPredefines"]
     subparams = ["tokenInsts", "tokenCards"]
@@ -96,6 +117,8 @@ def deal_token(stageinfo: dict, unedittrap: bool = True) -> str:
                 if nextdict := subdict.get(subtitle, False):
                     for t in nextdict:
                         cell_trap_info = cell_deal_token(data=t)
+                        if cell_trap_info["name"] in had_trap:
+                            continue
                         if traptext.get(cell_trap_info["type"], False):
                             traptext[cell_trap_info["type"]].append(
                                 cell_trap_info["text"]
@@ -108,7 +131,9 @@ def deal_token(stageinfo: dict, unedittrap: bool = True) -> str:
             #         for t in v:
     if traptext:
         if not unedittrap:
-            traptext = {k: v for k,v in traptext.items() if k != "不需要写入页面的装置"}
+            traptext = {
+                k: v for k, v in traptext.items() if k != "不需要写入页面的装置"
+            }
         for k, v in traptext.items():
             result_text += f"=={k}==\n" + "\n".join(list(set(v)))
             result_text += "\n"
@@ -153,8 +178,22 @@ async def return_text(
     trapsformat1,
     unedittrap: bool = True,
 ):
-    global unwritetiles, tilesformat, character_table, trapsformat, unwritetraps
-    global skill_table, env, TEMPLATES, new_tiles_table, arktool, hint, char, enemy_handbook_table
+    global \
+        unwritetiles, \
+        tilesformat, \
+        character_table, \
+        trapsformat, \
+        unwritetraps, \
+        had_trap
+    global \
+        skill_table, \
+        env, \
+        TEMPLATES, \
+        new_tiles_table, \
+        arktool, \
+        hint, \
+        char, \
+        enemy_handbook_table
     # 首先处理stage
     stage_id = arktool.get_stage_id(content=pagetext)
     if stage_id:
@@ -189,6 +228,12 @@ async def return_text(
     unwritetraps = unwritetraps1
     hint = []
     wikicode = pagetext[:]
+    had_trap = []
+    parsedwikitext = mwparserfromhell.parse(pagetext)
+    for template in parsedwikitext.filter_templates():
+        if template.name.matches("关卡装置"):
+            had_trap.append(template.get("装置名称").value.strip())
+            continue
     try:
         stageinfo = arktool.get_stage_info(content=pagetext)
         tiletext = deal_tiles(stageinfo=stageinfo)
@@ -234,4 +279,3 @@ async def return_text(
         hint.append(f"关卡出现bug！<br/>{e}")
         hint = "\n".join(list(set(hint)))
         return {"status": False, "text": pagetext, "hint": hint}
-
