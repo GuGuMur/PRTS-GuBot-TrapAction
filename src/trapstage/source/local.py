@@ -106,7 +106,7 @@ def cell_deal_token(data: dict) -> dict:
 
 
 def deal_token(stageinfo: dict, unedittrap: bool = True) -> str:
-    traptext: dict[str, list[str]] = {}
+    trap_collection: dict[str, list[str]] = {}
     result_text: str = ""
     mainparams = ["predefines", "hardPredefines"]
     subparams = ["tokenInsts", "tokenCards"]
@@ -117,24 +117,16 @@ def deal_token(stageinfo: dict, unedittrap: bool = True) -> str:
                 if nextdict := subdict.get(subtitle, False):
                     for t in nextdict:
                         cell_trap_info = cell_deal_token(data=t)
-                        if cell_trap_info["name"] in had_trap:
+                        if cell_trap_info.get("name", None) in had_trap:
                             continue
-                        if traptext.get(cell_trap_info["type"], False):
-                            traptext[cell_trap_info["type"]].append(
-                                cell_trap_info["text"]
-                            )
-                        else:
-                            traptext[cell_trap_info["type"]] = [cell_trap_info["text"]]
-            # for k,v in stageinfo[maintitle].items():
-            #     #k=["characterInsts","tokenInsts","characterCards","tokenCards"]
-            #     if v:
-            #         for t in v:
-    if traptext:
+                        trap_collection.setdefault(cell_trap_info["type"], []).append(
+                            cell_trap_info["text"]
+                        )
+
+    if trap_collection:
         if not unedittrap:
-            traptext = {
-                k: v for k, v in traptext.items() if k != "不需要写入页面的装置"
-            }
-        for k, v in traptext.items():
+            trap_collection.pop("不需要写入页面的装置", None)
+        for k, v in trap_collection.items():
             result_text += f"=={k}==\n" + "\n".join(list(set(v)))
             result_text += "\n"
         return clean_text(result_text)

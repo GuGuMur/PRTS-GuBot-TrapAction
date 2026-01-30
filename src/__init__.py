@@ -6,10 +6,10 @@ from functools import partial
 
 @click.group()
 def cli_group():
-	pass
+    pass
 
 
-@cli_group.command('trapstage')
+@cli_group.command("trapstage")
 @click.option(
     "--page",
     "-p",
@@ -17,20 +17,25 @@ def cli_group():
     show_default=True,
     help="哪里有一堆需要处理的关卡页面",
 )
-@click.option('--username', '-u', help='bot name')
-@click.option('--password', '-w', help='bot password')
+@click.option("--username", "-u", help="bot name")
+@click.option("--password", "-w", help="bot password")
 def _trapstage(page: str, username: str, password: str) -> None:
-	from trapstage import main as perform_action
-	coro = partial(perform_action, page=page, username=username, password=password)
-	anyio.run(coro)
+    from trapstage import main as perform_action
+
+    coro = partial(perform_action, page=page, username=username, password=password)
+    anyio.run(coro)
+
 
 @cli_group.command("trapedit")
 @click.option("--username", "-u", help="bot name")
 @click.option("--password", "-w", help="bot password")
-def _trapedit(username: str, password: str) -> None:
+@click.option(
+    "--edit/--no-edit", is_flag=True, default=True, help="是否进行编辑（默认是）"
+)
+def _trapedit(username: str, password: str, edit: bool = True) -> None:
     from trapedit import main as perform_action
 
-    coro = partial(perform_action, username=username, password=password)
+    coro = partial(perform_action, username=username, password=password, editable=edit)
     anyio.run(coro)
 
 
@@ -54,14 +59,14 @@ def _trapedit_test(page: str, username: str, password: str) -> None:
     coro = partial(perform_action, page=page, username=username, password=password)
     anyio.run(coro)
 
+
 def main():
-	try:
-		cli_group()
-	except Exception as e:
-		click.echo(f'Error: {e}', err=True)
-		sys.exit(1)
+    try:
+        cli_group()
+    except Exception as e:
+        click.echo(f"Error: {e}", err=True)
+        sys.exit(1)
 
 
-if __name__ == '__main__':
-	main()
-
+if __name__ == "__main__":
+    main()

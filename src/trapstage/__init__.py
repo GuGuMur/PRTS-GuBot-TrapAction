@@ -3,12 +3,13 @@ from pathlib import Path  # noqa: F401
 import asyncio
 from trapstage.source.local import return_text as rtl
 import re
+from loguru import logger
 import json
 
 patterns = [r"装置\s*==", r"==\s*区块"]
 
 
-async def deal(title, sem: asyncio.Semaphore):
+async def deal(title, sem: asyncio.Semaphore, editable: bool = True):
     async with sem:
         text = await bot.get_page_text(title=title)
         for i in patterns:
@@ -25,16 +26,23 @@ async def deal(title, sem: asyncio.Semaphore):
             trapsformat1=trapsformat,
         )
         # print(text2["text"])
-        if text2["status"]:
+        logger.success(title)
+        print(text2["text"])
+        if text2["status"] and editable:
             # text2 = text2["text"]
             # if text != text2:
             # print(text2)
-            await bot.edit_page(
-                title=title, text=text2["text"], summary="//Edit by TrapperScriptBot."
-            )
+                await bot.edit_page(
+                    title=title, text=text2["text"], summary="//Edit by TrapperScriptBot."
+                )
 
 
-async def main(page: str, username: str, password: str) -> None:
+async def main(
+    page: str,
+    username: str,
+    password: str,
+    editable: bool = True,
+) -> None:
     global bot
     bot = Bot(
         sitename="PRTS",
@@ -61,7 +69,7 @@ async def main(page: str, username: str, password: str) -> None:
     tasks = []
     sem = asyncio.Semaphore(10)
     for i in pagelist:
-        tasks.append(deal(i, sem))
+        tasks.append(deal(i, sem, editable=editable))
     await asyncio.gather(*tasks)
     # for i in pagelist:
     #     text = await bot.get_page_text(title=i)
@@ -70,6 +78,7 @@ async def main(page: str, username: str, password: str) -> None:
     #     print(a)
     # if a != text:
     #     await bot.edit_page(title=i, text=a, summary="//Edit by TrapperScript-Local")
+
 
 async def test(page: str, username: str, password: str) -> None:
     bot = Bot(
@@ -100,6 +109,7 @@ async def test(page: str, username: str, password: str) -> None:
         trapsformat1=trapsformat,
     )
     print(json.dumps(a, ensure_ascii=False, indent=4))
+
 
 if __name__ == "__main__":
     asyncio.run(main())

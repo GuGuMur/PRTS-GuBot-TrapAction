@@ -1,11 +1,11 @@
-name: 编辑版本新增装置
+name: 编辑版本新增装置(仅测试不编辑)
 
 on:
   workflow_dispatch:
 
 jobs:
   ruff:
-    name: 编辑版本新增装置
+    name: 编辑版本新增装置(仅测试不编辑)
     runs-on: ubuntu-latest
     concurrency:
       group: trapedit-${{ github.ref }}
@@ -28,8 +28,8 @@ jobs:
         run: |
           uv run src/__init__.py trapedit \
             --username "$USERNAME" \
-            --password "$PASSWORD"
-            --edit
+            --password "$PASSWORD" \
+            --no-edit
         shell: bash
         env:
           USERNAME: "${{ secrets.GH_BOT_USERNAME }}"
