@@ -1,11 +1,15 @@
-name: 编辑版本新增装置(仅测试不编辑)
+name: 编辑新增关卡的装置(测试)
 
 on:
   workflow_dispatch:
+    inputs:
+      page:
+        description: "关卡页面集合"
+        default: "首页/新增关卡"
 
 jobs:
   ruff:
-    name: 编辑版本新增装置(仅测试不编辑)
+    name: 编辑新增关卡的装置
     runs-on: ubuntu-latest
     concurrency:
       group: trapedit-${{ github.ref }}
@@ -26,11 +30,13 @@ jobs:
 
       - name: Run Actions
         run: |
-          uv run src/__init__.py trapedit \
+          uv run src/__init__.py trapstage \
+            --page "$PAGE" \
             --username "$USERNAME" \
-            --password "$PASSWORD" \
+            --password "$PASSWORD"
             --no-edit
         shell: bash
         env:
+          PAGE: "${{ github.event.inputs.page }}"
           USERNAME: "${{ secrets.GH_BOT_USERNAME }}"
           PASSWORD: "${{ secrets.GH_BOT_PASSWORD }}"
