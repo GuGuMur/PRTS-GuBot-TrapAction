@@ -9,7 +9,7 @@ on:
 
 jobs:
   ruff:
-    name: 编辑新增关卡的装置
+    name: 编辑新增关卡的装置(测试)
     runs-on: ubuntu-latest
     concurrency:
       group: trapedit-${{ github.ref }}
@@ -33,7 +33,7 @@ jobs:
           uv run src/__init__.py trapstage \
             --page "$PAGE" \
             --username "$USERNAME" \
-            --password "$PASSWORD"
+            --password "$PASSWORD" \
             --no-edit
         shell: bash
         env:

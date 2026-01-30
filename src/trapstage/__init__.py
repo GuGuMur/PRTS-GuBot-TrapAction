@@ -67,7 +67,7 @@ async def main(
     pagelist_ori = utils.get_all_links(new_pages)
     pagelist = sorted(list(set(pagelist_ori)), key=pagelist_ori.index)
     tasks = []
-    sem = asyncio.Semaphore(10)
+    sem = asyncio.Semaphore(1)
     for i in pagelist:
         tasks.append(deal(i, sem, editable=editable))
     await asyncio.gather(*tasks)
