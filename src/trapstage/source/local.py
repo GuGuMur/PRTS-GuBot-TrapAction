@@ -39,8 +39,8 @@ def cell_deal_token(data: dict) -> dict:
     # 能从json中直接获取的内容
     if data["inst"]["level"]:
         result["装置等级"] = data["inst"]["level"]
-    if data.get("initialCnt"):
-        result["装置可部署数量"] = data["initialCnt"]
+    # if data.get("initialCnt"):
+    result["装置可部署数量"] = data.get("initialCnt", 0)
     if data.get("skillIndex") is not None and data["skillIndex"] != -1:
         charskillid_local = charinfo["skills"][data["skillIndex"]]["skillId"]
         result["装置技能"] = return_skill_name(skill_table, charskillid_local)
