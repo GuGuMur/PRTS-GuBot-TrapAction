@@ -28,7 +28,7 @@ jobs:
         run: |
           uv run src/__init__.py trapedit \
             --username "$USERNAME" \
-            --password "$PASSWORD"
+            --password "$PASSWORD" \
             --edit
         shell: bash
         env:
