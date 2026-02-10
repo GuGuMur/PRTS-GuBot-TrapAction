@@ -496,7 +496,7 @@ async def get_tokens_prefab(version: str) -> list[str]:
     ]
 
 
-async def main(username: str, password: str) -> None:
+async def main(username: str, password: str, editable: bool = True) -> None:
     os.environ["UNITYPY_AK"] = "1"
     sem = asyncio.Semaphore(1)
     global char_data, skill_data, asset_data, rich_text, wikidata, existed_pages, all_contents, missing_traps, bot
