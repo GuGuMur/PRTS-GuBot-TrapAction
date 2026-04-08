@@ -128,6 +128,13 @@ def char_data_fill(text, path, data):
 def char_data_fill_v2(text, path, data, prefix=""):
     result = {}
 
+    def _is_empty(value):
+        return value is None or (isinstance(value, str) and not value.strip())
+
+    if ".candidates[" in prefix and "talents[" in prefix:
+        if _is_empty(data.get("name")) or _is_empty(data.get("description")):
+            return {}
+
     for key, value in path.items():
         current_path = f"{prefix}.{key}" if prefix else key
 
