@@ -176,7 +176,7 @@ async def asset_data_fill(asset_data, id, client: Client):
         "SandboxResTrap",
         "GiantTrap",
     }
-    CATEGORY = {1: "默认", 2: "装置", 4: "障碍物"}
+    CATEGORY = {1: "默认", 2: "装置", 3: "ERROR", 4: "障碍物"}
     SIDE = {0: "无阵营", 1: "我方", 2: "敌方", 4: "中立"}
     OPTION = {0: "否", 1: "是"}
     CARD_POLICY = {0: "默认", 1: "唯一", 2: "队列"}
@@ -228,7 +228,6 @@ async def asset_data_fill(asset_data, id, client: Client):
             continue
         # workwork
         tree = obj.read_typetree()
-        print(json.dumps(tree, ensure_ascii=False, indent=2))
         result["实体类型"] = CATEGORY[tree["_category"]]
         result["阵营"] = SIDE[tree["_sideType"]]
         result["阻挡半径"] = "{:.4f}".format(tree["_blockRadiusSquare"] ** 0.5)
