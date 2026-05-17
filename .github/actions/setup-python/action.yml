@@ -21,6 +21,7 @@ runs:
       run: |
         sudo apt-get update
         sudo apt-get install -y ffmpeg
+      shell: bash
 
     - run: uv sync --all-extras --locked
       shell: bash
