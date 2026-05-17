@@ -228,6 +228,7 @@ async def asset_data_fill(asset_data, id, client: Client):
             continue
         # workwork
         tree = obj.read_typetree()
+        print(repr(tree))
         result["实体类型"] = CATEGORY[tree["_category"]]
         result["阵营"] = SIDE[tree["_sideType"]]
         result["阻挡半径"] = "{:.4f}".format(tree["_blockRadiusSquare"] ** 0.5)
