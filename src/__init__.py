@@ -64,6 +64,9 @@ def main():
     try:
         cli_group()
     except Exception as e:
+        import traceback
+
+        traceback.print_exc()
         click.echo(f"Error: {e}", err=True)
         sys.exit(1)
 
