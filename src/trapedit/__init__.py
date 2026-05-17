@@ -541,7 +541,8 @@ async def main(username: str, password: str, editable: bool = True) -> None:
         for key, value in char_data.items()
         if key.startswith("trap_") and key not in wikidata
     }
-    logger.success(f"已获取所有需要编辑的装置：{str(missing_traps)}")
+    logger.success("已获取所有需要编辑的装置！")
+    print(json.dumps(missing_traps, ensure_ascii=False, indent=2))
 
     # localfix: dict = json.loads(
     #     (Path(__file__).parent / "all_contents.json").read_text(encoding="utf-8"))
